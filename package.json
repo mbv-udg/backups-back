@@ -1,0 +1,22 @@
+{
+  "name": "backups-back",
+  "version": "1.0.0",
+  "description": "A NodeJS back-end to recover backups.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mbv-udg/backups-back.git"
+  },
+  "author": "mireia",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mbv-udg/backups-back/issues"
+  },
+  "homepage": "https://github.com/mbv-udg/backups-back#readme",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
