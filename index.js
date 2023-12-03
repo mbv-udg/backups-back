@@ -8,11 +8,11 @@ app.use(Express.json());
 
 // Express Routes Import
 const AuthorizationRoutes = require("./authorization/routes");
-//const MainRoutes = require("./main/routes");
+const MainRoutes = require("./main/routes");
 
 // Starting app
 app.use("/", AuthorizationRoutes);
-//app.use("/main", MainRoutes);
+app.use("/backups", MainRoutes);
 
 app.listen(PORT, () => {
     console.log("Server Listening on PORT:", port);
