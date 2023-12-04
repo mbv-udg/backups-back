@@ -16,10 +16,22 @@ router.get(
   MainController.getAllBackups
 );
 
-/*router.get(
+router.get(
   "/:backup/:dirName",
   [isAuthenticatedMiddleware.check],
   MainController.getBackupDir
-);*/
+);
+
+router.post(
+  "/recover/db/:name",
+  [isAuthenticatedMiddleware.check],
+  MainController.recoverDB
+);
+
+router.post(
+  "/recover/files/:name",
+  [isAuthenticatedMiddleware.check],
+  MainController.recoverDB
+);
 
 module.exports = router;
