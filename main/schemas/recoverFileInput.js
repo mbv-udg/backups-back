@@ -1,13 +1,19 @@
 module.exports = {
   type: "object",
   properties: {
-    name: {
+    backup: {
       type: "string",
+      pattern: '^\\d{4}-\\d{2}-\\d{2}_\\d{2}-\\d{2}'
     },
-    directory: {
-      type: "boolean",
+    dir: {
+      type: "string",
+      default: "."
+    },
+    file: {
+      type: "string",
+      default: "."
     }
   },
-  required: ["name", "boolean"],
+  required: ["backup"],
   additionalProperties: false,
 };

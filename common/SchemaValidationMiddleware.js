@@ -26,11 +26,11 @@ module.exports = {
         return next();
       }
 
-      return res.send({
+      return res.status(400).json({
         status: false,
         error: {
           message: `Invalid Payload: ${ajv.errorsText(validate.errors)}`
-        }
+        },
       });
     }
   }
