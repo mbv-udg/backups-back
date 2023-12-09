@@ -40,6 +40,76 @@ module.exports = {
       }
     }
   },
+  getFilesBackups: (req, res) => {
+    let dir = '/home/xarxes/backups/'+req.user.username
+    let script = 'ssh xarxes@'+backupsServer+' find '+dir+' -mindepth 1 -maxdepth 1 ! -type l';
+    
+    try {
+      let result = execSync(script);
+      let names = result.toString().replaceAll(dir+'/', '');
+      let list = names.split("\n");
+      list = list.filter(n => n && n.match('^\\d{4}-\\d{2}-\\d{2}_\\d{2}-\\d{2}') );
+      
+      return res.status(200).json({
+        status: true,
+        data: list,
+      });
+
+    } catch (error) {
+      if(error.status === 1) {
+        return res.status(400).json({
+          status: false,
+          error: {
+              message: `There are no backups.`,
+          },
+        });
+      }
+      else {
+        console.error(error);
+        return res.status(500).json({
+          status: false,
+          error: {
+              message: `Internal server error`,
+          },
+        });
+      }
+    }
+  },
+  getDbBackups: (req, res) => {
+    let dir = '/home/xarxes/backups/'+req.user.username
+    let script = 'ssh xarxes@'+backupsServer+' find '+dir+' -mindepth 1 -maxdepth 1 ! -type l';
+    
+    try {
+      let result = execSync(script);
+      let names = result.toString().replaceAll(dir+'/', '');
+      let list = names.split("\n");
+      list = list.filter(n => n && n.match('^db_\\d{4}-\\d{2}-\\d{2}_\\d{2}-\\d{2}') );
+      
+      return res.status(200).json({
+        status: true,
+        data: list,
+      });
+
+    } catch (error) {
+      if(error.status === 1) {
+        return res.status(400).json({
+          status: false,
+          error: {
+              message: `There are no backups.`,
+          },
+        });
+      }
+      else {
+        console.error(error);
+        return res.status(500).json({
+          status: false,
+          error: {
+              message: `Internal server error`,
+          },
+        });
+      }
+    }
+  },
   getBackupDir: (req, res) => {
     const {
       params: { backup, dirName }

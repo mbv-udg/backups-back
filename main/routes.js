@@ -18,6 +18,18 @@ router.get(
 );
 
 router.get(
+  "/files",
+  [isAuthenticatedMiddleware.check],
+  MainController.getFilesBackups
+);
+
+router.get(
+  "/db",
+  [isAuthenticatedMiddleware.check],
+  MainController.getDbBackups
+);
+
+router.get(
   "/:backup/:dirName?",
   [isAuthenticatedMiddleware.check],
   MainController.getBackupDir
