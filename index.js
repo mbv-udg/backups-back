@@ -1,9 +1,11 @@
 const Express = require("express");
+const cors = require('cors')
 const app = Express();
 
 const { port } = require("./config");
 const PORT = process.env.PORT || port;
 
+app.use(cors());
 app.use(Express.json());
 
 // Express Routes Import
