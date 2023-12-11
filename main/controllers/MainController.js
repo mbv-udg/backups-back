@@ -117,7 +117,7 @@ module.exports = {
 
     let dir = '/home/xarxes/backups/'+req.user.username+'/'+backup;
     dir += dirName ? '/'+dirName : '';
-    let script = 'ssh xarxes@'+backupsServer+' find '+dir+' -mindepth 1 -maxdepth 1 ! -type l';
+    let script = `ssh xarxes@`+backupsServer+` find `+dir+` -mindepth 1 -maxdepth 1 ! -type l -type d -printf '%p/' , ! -type d -print `;
     
     try {
       let result = execSync(script);
