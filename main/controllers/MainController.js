@@ -50,6 +50,12 @@ module.exports = {
       let list = names.split("\n");
       list = list.filter(n => n && n.match('^\\d{4}-\\d{2}-\\d{2}_\\d{2}-\\d{2}') );
       
+      list = list.sort((a1,a2) => {
+        if(a1 < a2) return 1;
+        else if (a2 == a1) return 0;
+        else return -1;
+      });      
+
       return res.status(200).json({
         status: true,
         data: list,
@@ -85,6 +91,12 @@ module.exports = {
       let list = names.split("\n");
       list = list.filter(n => n && n.match('^db_\\d{4}-\\d{2}-\\d{2}_\\d{2}-\\d{2}') );
       
+      list = list.sort((a1,a2) => {
+        if(a1 < a2) return 1;
+        else if (a2 == a1) return 0;
+        else return -1;
+      });
+
       return res.status(200).json({
         status: true,
         data: list,
@@ -111,12 +123,11 @@ module.exports = {
     }
   },
   getBackupDir: (req, res) => {
-    const {
-      params: { backup, dirName }
-    } = req;
+    const { backup } = req.params;
+    const { name } = req.body;
 
     let dir = '/home/xarxes/backups/'+req.user.username+'/'+backup;
-    dir += dirName ? '/'+dirName : '';
+    dir += name ? '/'+name : '';
     let script = `ssh xarxes@`+backupsServer+` find `+dir+` -mindepth 1 -maxdepth 1 ! -type l -type d -printf '%p/' , ! -type d -print `;
     
     try {
@@ -124,7 +135,15 @@ module.exports = {
       let names = result.toString().replaceAll(dir+'/', '');
       let list = names.split("\n");
       list = list.filter(n => n);
-      
+
+      list = list.sort((a1,a2) => {
+        if(a1 < a2) return 1;
+        else if (a2 == a1) return 0;
+        else return -1;
+      });
+
+      console.log(result.toString());
+            
       return res.status(200).json({
         status: true,
         data: list,

@@ -10,6 +10,7 @@ const SchemaValidationMiddleware = require("../common/SchemaValidationMiddleware
 // JSON Schema Imports for payload verification
 const recoverFileInput = require("./schemas/recoverFileInput");
 const recoverDbInput = require("./schemas/recoverDbInput");
+const backupFiles = require("./schemas/getBackupFilesInput");
 
 router.get(
   "/",
@@ -29,9 +30,10 @@ router.get(
   MainController.getDbBackups
 );
 
-router.get(
-  "/:backup/:dirName?",
-  [isAuthenticatedMiddleware.check],
+router.post(
+  "/:backup",
+  [isAuthenticatedMiddleware.check,
+    SchemaValidationMiddleware.verify(backupFiles)],
   MainController.getBackupDir
 );
 
