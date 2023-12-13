@@ -141,8 +141,6 @@ module.exports = {
         else if (a2 == a1) return 0;
         else return -1;
       });
-
-      console.log(result.toString());
             
       return res.status(200).json({
         status: true,
