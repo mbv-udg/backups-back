@@ -1,9 +1,9 @@
 const jwt = require("jsonwebtoken");
 const { execSync } = require("child_process");
 
-const { jwtSecret, jwtExpirationInSeconds, sftpServer } = require("../../config");
+const { jwtSecret, jwtExpirationInSeconds, jwtSecretRefresh, jwtExpirationInSecondsRefresh, sftpServer } = require("../../config");
 
-// Generates an Access Token using username and userId for the user's authentication
+// Generates an Access Token using username for the user's authentication
 const generateAccessToken = (username) => {
   return jwt.sign(
     {
@@ -12,6 +12,18 @@ const generateAccessToken = (username) => {
       jwtSecret,
     {
       expiresIn: jwtExpirationInSeconds,
+    }
+  );
+};
+
+const generateRefreshToken = (username) => {
+  return jwt.sign(
+    {
+      username,
+    },
+      jwtSecretRefresh,
+    {
+      expiresIn: jwtExpirationInSecondsRefresh,
     }
   );
 };
@@ -46,15 +58,42 @@ module.exports = {
 
     // Generating an AccessToken for the user, which will be
     // required in every subsequent request.
-    const accessToken = generateAccessToken(username);
+    let accessToken = generateAccessToken(username);
+    var refreshToken = generateRefreshToken(username);
 
     return res.status(200).json({
         status: true,
         data: {
             user: username,
             token: accessToken,
+            refreshToken: refreshToken
         },
     });
 
   },
+  token: async (req, res) => {
+    var { refreshToken } = req.body;
+
+    //Verificar si el refreshtoken no està caducat
+    jwt.verify(refreshToken, jwtSecretRefresh, (err, user) => {
+      if (err) {
+        return res.status(403).json({
+          status: false,
+          error: 'Invalid access token provided, please login again.'
+        });
+      }
+
+      //Si no ha caducat
+      var accessToken = generateAccessToken(req.user);
+
+      return res.status(200).json({
+          status: true,
+          data: {
+              token: accessToken,
+              refreshToken: refreshToken
+          },
+      });
+    });
+
+  }
 };
