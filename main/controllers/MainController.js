@@ -207,7 +207,7 @@ module.exports = {
     }
   },
   recoverFiles: (req, res) => {
-    const { backup, dir, file } = req.body;
+    const { backup, dir, file, isDir } = req.body;
 
     let path = '/home/xarxes/backups/'+req.user.username+'/'+backup+'/'+dir+'/'+file;
     let cmdExists = 'ssh xarxes@'+backupsServer+' ls '+path;
@@ -216,7 +216,7 @@ module.exports = {
       let result = execSync(cmdExists);
 
       //If it doesn't fail, file exists
-      let recover = 'ssh xarxes@'+backupsServer+' /home/xarxes/scripts/recover_files.sh '+req.user.username+' '+backup+' '+dir+' '+file;
+      let recover = 'ssh xarxes@'+backupsServer+' /home/xarxes/scripts/recover_files.sh '+req.user.username+' '+backup+' '+dir+' '+file+' '+(isDir ? "1" : "0");
       result = execSync(recover);
 
       return res.status(200).json({

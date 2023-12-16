@@ -12,6 +12,10 @@ module.exports = {
     file: {
       type: "string",
       default: "."
+    },
+    isDir: {
+      type: "boolean",
+      default: false
     }
   },
   required: ["backup"],
